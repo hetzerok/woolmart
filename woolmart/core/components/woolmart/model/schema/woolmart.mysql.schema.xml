@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<model package="woolmart" baseClass="xPDOObject" platform="mysql" defaultEngine="MyISAM">
+    
+    <object class="WoolCategories" table="wool_categories" extends="xPDOSimpleObject">
+        <!-- Текстовые поля -->
+        <field key="pagetitle" dbtype="varchar" precision="255" phptype="string" null="false" default="" index="fulltext" indexgrp="content_ft_idx" />
+        <field key="longtitle" dbtype="varchar" precision="255" phptype="string" null="false" default="" index="fulltext" indexgrp="content_ft_idx" />
+        <field key="description" dbtype="varchar" precision="255" phptype="string" null="false" default="" index="fulltext" indexgrp="content_ft_idx" />       
+        <field key="introtext" dbtype="text" phptype="string" index="fulltext" indexgrp="content_ft_idx" />
+        <field key="content" dbtype="mediumtext" phptype="string" index="fulltext" indexgrp="content_ft_idx" />
+        <!-- Создано, опубликовано, удалено -->
+        <field key="createdon" dbtype="int" precision="20" phptype="timestamp" null="false" default="0" />
+        <field key="publishedon" dbtype="int" precision="20" phptype="timestamp" null="false" default="0" />
+        <field key="deletedon" dbtype="int" precision="20" phptype="timestamp" null="false" default="0" />             
+        <!-- Флаги публикации, удаления и отображения в меню -->
+        <field key="published" dbtype="tinyint" precision="1" attributes="unsigned" phptype="boolean" null="false" default="0" index="index" />
+        <field key="deleted" dbtype="tinyint" precision="1" attributes="unsigned" phptype="boolean" null="false" default="0" index="index" />
+        <field key="hidemenu" dbtype="tinyint" precision="1" attributes="unsigned" phptype="boolean" null="false" default="0" index="index" />
+        <!-- Шаблоны категории и товаров внутри -->
+        <field key="template" dbtype="int" precision="10" phptype="integer" null="false" default="0" index="index" />
+        <field key="producttemplate" dbtype="int" precision="10" phptype="integer" null="false" default="0" index="index" />
+        <!-- Позиция в меню -->
+        <field key="menuindex" dbtype="int" precision="10" phptype="integer" null="false" default="0" index="index" />
+        <!-- Строим дерево категорий -->
+        <field key="parent" dbtype="int" precision="10" phptype="integer" null="false" default="0" index="index" />
+        <!-- Флаг вершины дерева -->
+        <field key="apex" dbtype="tinyint" precision="1" attributes="unsigned" phptype="boolean" null="false" default="0" index="index" />
+        <!-- Алиас для ЧПУ -->
+        <field key="alias" dbtype="varchar" precision="255" phptype="string" null="true" default="" index="index" />
+        <!-- УРЛ для ЧПУ -->
+        <field key="uri" dbtype="text" phptype="string" null="true" index="index" />
+        
+        <index alias="alias" name="alias" primary="false" unique="false" type="BTREE">
+            <column key="alias" length="" collation="A" null="true" />
+        </index>
+        <index alias="apex" name="apex" primary="false" unique="false" type="BTREE">
+            <column key="apex" length="" collation="A" null="false" />
+        </index>
+        <index alias="published" name="published" primary="false" unique="false" type="BTREE">
+            <column key="published" length="" collation="A" null="false" />
+        </index>
+        <index alias="parent" name="parent" primary="false" unique="false" type="BTREE">
+            <column key="parent" length="" collation="A" null="false" />
+        </index>
+        <index alias="template" name="template" primary="false" unique="false" type="BTREE">
+            <column key="template" length="" collation="A" null="false" />
+        </index>
+        <index alias="producttemplate" name="producttemplate" primary="false" unique="false" type="BTREE">
+            <column key="producttemplate" length="" collation="A" null="false" />
+        </index>
+        <index alias="menuindex" name="menuindex" primary="false" unique="false" type="BTREE">
+            <column key="menuindex" length="" collation="A" null="false" />
+        </index>
+        <index alias="deleted" name="deleted" primary="false" unique="false" type="BTREE">
+            <column key="deleted" length="" collation="A" null="false" />
+        </index>
+        <index alias="hidemenu" name="hidemenu" primary="false" unique="false" type="BTREE">
+            <column key="hidemenu" length="" collation="A" null="false" />
+        </index>
+        <index alias="uri" name="uri" primary="false" unique="false" type="BTREE">
+            <column key="uri" length="1000" collation="A" null="true" />
+        </index>
+        <index alias="content_ft_idx" name="content_ft_idx" primary="false" unique="false" type="FULLTEXT">
+            <column key="pagetitle" length="" collation="A" null="false" />
+            <column key="longtitle" length="" collation="A" null="false" />
+            <column key="description" length="" collation="A" null="false" />
+            <column key="introtext" length="" collation="A" null="true" />
+            <column key="content" length="" collation="A" null="true" />
+        </index>
+        <index alias="cache_refresh_index" name="cache_refresh_idx" primary="false" unique="false" type="BTREE">
+            <column key="parent" length="" collation="A" null="false" />
+            <column key="menuindex" length="" collation="A" null="false" />
+            <column key="id" length="" collation="A" null="false" />
+        </index>
+ 
+        <aggregate alias="Template" class="modTemplate" local="template" foreign="id" cardinality="one" owner="foreign" />
+        <aggregate alias="ProductTemplate" class="modTemplate" local="producttemplate" foreign="id" cardinality="one" owner="foreign" />
+    </object>
+    
+    <object class="WoolProducts" table="wool_products" extends="xPDOSimpleObject">
+        <!-- Текстовые поля -->
+        <field key="pagetitle" dbtype="varchar" precision="255" phptype="string" null="false" default="" index="fulltext" indexgrp="content_ft_idx" />
+        <field key="longtitle" dbtype="varchar" precision="255" phptype="string" null="false" default="" index="fulltext" indexgrp="content_ft_idx" />
+        <field key="description" dbtype="varchar" precision="255" phptype="string" null="false" default="" index="fulltext" indexgrp="content_ft_idx" />       
+        <field key="introtext" dbtype="text" phptype="string" index="fulltext" indexgrp="content_ft_idx" />
+        <field key="content" dbtype="mediumtext" phptype="string" index="fulltext" indexgrp="content_ft_idx" />
+        <!-- Создано, опубликовано, удалено -->
+        <field key="createdon" dbtype="int" precision="20" phptype="timestamp" null="false" default="0" />
+        <field key="publishedon" dbtype="int" precision="20" phptype="timestamp" null="false" default="0" />
+        <field key="deletedon" dbtype="int" precision="20" phptype="timestamp" null="false" default="0" />             
+        <!-- Флаги публикации, удаления и отображения в меню -->
+        <field key="published" dbtype="tinyint" precision="1" attributes="unsigned" phptype="boolean" null="false" default="0" index="index" />
+        <field key="deleted" dbtype="tinyint" precision="1" attributes="unsigned" phptype="boolean" null="false" default="0" index="index" />
+        <field key="hidemenu" dbtype="tinyint" precision="1" attributes="unsigned" phptype="boolean" null="false" default="0" index="index" />
+        <!-- Позиция в меню -->
+        <field key="menuindex" dbtype="int" precision="10" phptype="integer" null="false" default="0" index="index" />
+        <!-- Строим дерево категорий -->
+        <field key="parent" dbtype="int" precision="10" phptype="integer" null="false" default="0" index="index" />
+        <!-- Алиас для ЧПУ -->
+        <field key="alias" dbtype="varchar" precision="255" phptype="string" null="true" default="" index="index" />
+        <!-- УРЛ для ЧПУ -->
+        <field key="uri" dbtype="text" phptype="string" null="true" index="index" />
+    </object>    
+    
+</model>
