@@ -6,8 +6,8 @@ class WoolMart {
     function __construct(modX &$modx,array $config = array()) {
         $this->modx =& $modx;
  
-        $basePath = $this->modx->getOption('doodles.core_path',$config,$this->modx->getOption('core_path').'components/woolmart/');
-        $assetsUrl = $this->modx->getOption('doodles.assets_path',$config,$this->modx->getOption('assets_url').'components/woolmart/');
+        $basePath = $this->modx->getOption('woolmart.core_path',$config,$this->modx->getOption('core_path').'components/woolmart/');
+        $assetsUrl = $this->modx->getOption('woolmart.assets_path',$config,$this->modx->getOption('assets_url').'components/woolmart/');
         $this->config = array_merge(array(
             'basePath' => $basePath,
             'corePath' => $basePath,
@@ -20,6 +20,6 @@ class WoolMart {
             'assetsUrl' => $assetsUrl,
             'connectorUrl' => $assetsUrl.'connector.php',
         ),$config);
- 
+        $this->modx->addPackage('woolmart',$this->config['modelPath']);
     }
 }

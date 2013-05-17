@@ -1,9 +1,9 @@
 -- phpMyAdmin SQL Dump
--- version 3.5.8
+-- version 3.5.2.2
 -- http://www.phpmyadmin.net
 --
 -- Хост: localhost
--- Время создания: Май 16 2013 г., 17:31
+-- Время создания: Май 17 2013 г., 17:57
 -- Версия сервера: 5.5.27-log
 -- Версия PHP: 5.3.24
 
@@ -104,7 +104,7 @@ CREATE TABLE IF NOT EXISTS `modx_access_context` (
   KEY `principal` (`principal`),
   KEY `authority` (`authority`),
   KEY `policy` (`policy`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=4 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=5 ;
 
 --
 -- Дамп данных таблицы `modx_access_context`
@@ -113,7 +113,8 @@ CREATE TABLE IF NOT EXISTS `modx_access_context` (
 INSERT INTO `modx_access_context` (`id`, `target`, `principal_class`, `principal`, `authority`, `policy`) VALUES
 (1, 'web', 'modUserGroup', 0, 9999, 3),
 (2, 'mgr', 'modUserGroup', 1, 0, 2),
-(3, 'web', 'modUserGroup', 1, 0, 2);
+(3, 'web', 'modUserGroup', 1, 0, 2),
+(4, 'web', 'modUserGroup', 2, 9999, 11);
 
 -- --------------------------------------------------------
 
@@ -1179,7 +1180,7 @@ CREATE TABLE IF NOT EXISTS `modx_lexicon_entries` (
   KEY `topic` (`topic`),
   KEY `namespace` (`namespace`),
   KEY `language` (`language`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=3 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=5 ;
 
 --
 -- Дамп данных таблицы `modx_lexicon_entries`
@@ -1187,7 +1188,9 @@ CREATE TABLE IF NOT EXISTS `modx_lexicon_entries` (
 
 INSERT INTO `modx_lexicon_entries` (`id`, `name`, `value`, `topic`, `namespace`, `language`, `createdon`, `editedon`) VALUES
 (1, 'setting_woolmart.core_path', 'Путь к ядру магазина', 'default', 'core', 'ru', '2013-05-16 13:26:15', '0000-00-00 00:00:00'),
-(2, 'setting_woolmart.assets_path', 'Путь к файлам магазина', 'default', 'core', 'ru', '2013-05-16 13:27:20', '0000-00-00 00:00:00');
+(2, 'setting_woolmart.assets_path', 'Путь к файлам магазина', 'default', 'core', 'ru', '2013-05-16 13:27:20', '0000-00-00 00:00:00'),
+(3, 'setting_woolmart.core_path', 'Путь к ядру магазина', 'setting', 'core', 'ru', '2013-05-17 17:12:50', '0000-00-00 00:00:00'),
+(4, 'setting_woolmart.assets_path', 'Путь к файлам магазина', 'setting', 'core', 'ru', '2013-05-17 17:13:18', '0000-00-00 00:00:00');
 
 -- --------------------------------------------------------
 
@@ -1203,7 +1206,7 @@ CREATE TABLE IF NOT EXISTS `modx_manager_log` (
   `classKey` varchar(100) NOT NULL DEFAULT '',
   `item` varchar(255) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=4 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=9 ;
 
 --
 -- Дамп данных таблицы `modx_manager_log`
@@ -1212,7 +1215,12 @@ CREATE TABLE IF NOT EXISTS `modx_manager_log` (
 INSERT INTO `modx_manager_log` (`id`, `user`, `occurred`, `action`, `classKey`, `item`) VALUES
 (1, 1, '2013-05-16 13:22:14', 'namespace_create', 'modNamespace', 'woolmart'),
 (2, 1, '2013-05-16 13:26:16', 'setting_create', 'modSystemSetting', 'woolmart.core_path'),
-(3, 1, '2013-05-16 13:27:21', 'setting_create', 'modSystemSetting', 'woolmart.assets_path');
+(3, 1, '2013-05-16 13:27:21', 'setting_create', 'modSystemSetting', 'woolmart.assets_path'),
+(4, 1, '2013-05-17 13:13:48', 'user_group_create', 'modUserGroup', '2'),
+(5, 1, '2013-05-17 17:02:36', 'snippet_create', 'modSnippet', '1'),
+(6, 1, '2013-05-17 17:04:13', 'resource_update', 'modResource', '1'),
+(7, 1, '2013-05-17 17:12:51', 'setting_update', 'modSystemSetting', 'woolmart.core_path'),
+(8, 1, '2013-05-17 17:13:19', 'setting_update', 'modSystemSetting', 'woolmart.assets_path');
 
 -- --------------------------------------------------------
 
@@ -1284,14 +1292,15 @@ CREATE TABLE IF NOT EXISTS `modx_membergroup_names` (
   KEY `parent` (`parent`),
   KEY `rank` (`rank`),
   KEY `dashboard` (`dashboard`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=3 ;
 
 --
 -- Дамп данных таблицы `modx_membergroup_names`
 --
 
 INSERT INTO `modx_membergroup_names` (`id`, `name`, `description`, `parent`, `rank`, `dashboard`) VALUES
-(1, 'Administrator', NULL, 0, 0, 1);
+(1, 'Administrator', NULL, 0, 0, 1),
+(2, 'shoppers', 'Покупатели', 0, 0, 1);
 
 -- --------------------------------------------------------
 
@@ -1540,7 +1549,59 @@ INSERT INTO `modx_session` (`id`, `access`, `data`) VALUES
 ('1vd7bnqvacksrokfajb7bdggr0', 1368695941, 'modx.user.contextTokens|a:0:{}'),
 ('52o3n377j7vdriptgikqhobnp6', 1368695961, 'modx.user.contextTokens|a:0:{}'),
 ('51d4c3hv1jcgv7uqm7nma5one5', 1368696147, 'modx.user.contextTokens|a:0:{}'),
-('topkah4tutsqiorf4veucaomb4', 1368696766, 'modx.user.contextTokens|a:0:{}');
+('topkah4tutsqiorf4veucaomb4', 1368696766, 'modx.user.contextTokens|a:0:{}'),
+('v1na37elgqjjsvaspv6min7nf7', 1368795841, 'modx.user.contextTokens|a:1:{s:3:"mgr";i:1;}modx.mgr.user.token|s:52:"modx51948fe68c0e80.88715069_15195f242537499.09565278";modx.mgr.session.cookie.lifetime|i:0;newResourceTokens|a:1:{i:0;s:23:"51962ac11540f4.59581854";}'),
+('rnbj5dmvghhuhomlf25auplhi3', 1368781337, 'modx.user.contextTokens|a:0:{}'),
+('2iot34trujbal5d673bktqpn95', 1368781369, 'modx.user.contextTokens|a:0:{}'),
+('1b07nr67i60but0fr17tiu4ge5', 1368781383, 'modx.user.contextTokens|a:0:{}'),
+('nlopq346sspufehcss3jvhm694', 1368781799, 'modx.user.contextTokens|a:0:{}'),
+('13glef4c4duoe9pqsudvkuch86', 1368788540, 'modx.user.contextTokens|a:0:{}'),
+('u6jmok0eu2stv6rjuednm7oir6', 1368788549, 'modx.user.contextTokens|a:0:{}'),
+('t2r5sk35dcb5866v5suq4ssfh6', 1368794570, 'modx.user.contextTokens|a:0:{}'),
+('53pj9dr69mbgl2ou57371ubr67', 1368794862, 'modx.user.contextTokens|a:0:{}'),
+('h681lqmimk2ki6st4b22v3bkv5', 1368794870, 'modx.user.contextTokens|a:0:{}'),
+('7i0rd1tbuejahv4m12m7t8tfn6', 1368794970, 'modx.user.contextTokens|a:0:{}'),
+('pc3p7bv1askf5pdis9sis816r6', 1368795699, 'modx.user.contextTokens|a:0:{}'),
+('51l5n14q3vmp8rqj8l719s7cs0', 1368795764, 'modx.user.0.resourceGroups|a:1:{s:3:"web";a:0:{}}modx.user.0.attributes|a:1:{s:3:"web";a:4:{s:16:"modAccessContext";a:1:{s:3:"web";a:1:{i:0;a:3:{s:9:"principal";i:0;s:9:"authority";s:1:"0";s:6:"policy";a:1:{s:4:"load";b:1;}}}}s:22:"modAccessResourceGroup";a:0:{}s:17:"modAccessCategory";a:0:{}s:28:"sources.modAccessMediaSource";a:0:{}}}modx.user.contextTokens|a:0:{}'),
+('tmnb5ge573a6ec3dq49rppj2o7', 1368795845, 'modx.user.contextTokens|a:0:{}'),
+('h08u2n4bs38rs99jlq6jumfeo0', 1368795853, 'modx.user.contextTokens|a:0:{}'),
+('f025cnjj58pv2tdjf25sqaitm1', 1368795854, 'modx.user.0.resourceGroups|a:1:{s:3:"web";a:0:{}}modx.user.0.attributes|a:1:{s:3:"web";a:4:{s:16:"modAccessContext";a:1:{s:3:"web";a:1:{i:0;a:3:{s:9:"principal";i:0;s:9:"authority";s:1:"0";s:6:"policy";a:1:{s:4:"load";b:1;}}}}s:22:"modAccessResourceGroup";a:0:{}s:17:"modAccessCategory";a:0:{}s:28:"sources.modAccessMediaSource";a:0:{}}}modx.user.contextTokens|a:0:{}'),
+('se7gqd2hmf2qf41pfg77dpsl80', 1368795858, 'modx.user.0.resourceGroups|a:1:{s:3:"web";a:0:{}}modx.user.0.attributes|a:1:{s:3:"web";a:4:{s:16:"modAccessContext";a:1:{s:3:"web";a:1:{i:0;a:3:{s:9:"principal";i:0;s:9:"authority";s:1:"0";s:6:"policy";a:1:{s:4:"load";b:1;}}}}s:22:"modAccessResourceGroup";a:0:{}s:17:"modAccessCategory";a:0:{}s:28:"sources.modAccessMediaSource";a:0:{}}}modx.user.contextTokens|a:0:{}'),
+('m1lk856pjv2n8ifkidc2mdi841', 1368796056, 'modx.user.0.resourceGroups|a:1:{s:3:"web";a:0:{}}modx.user.0.attributes|a:1:{s:3:"web";a:4:{s:16:"modAccessContext";a:1:{s:3:"web";a:1:{i:0;a:3:{s:9:"principal";i:0;s:9:"authority";s:1:"0";s:6:"policy";a:1:{s:4:"load";b:1;}}}}s:22:"modAccessResourceGroup";a:0:{}s:17:"modAccessCategory";a:0:{}s:28:"sources.modAccessMediaSource";a:0:{}}}modx.user.contextTokens|a:0:{}'),
+('7u1f62ajg4dgc2o4mp49v26a67', 1368796225, 'modx.user.0.resourceGroups|a:1:{s:3:"web";a:0:{}}modx.user.0.attributes|a:1:{s:3:"web";a:4:{s:16:"modAccessContext";a:1:{s:3:"web";a:1:{i:0;a:3:{s:9:"principal";i:0;s:9:"authority";s:1:"0";s:6:"policy";a:1:{s:4:"load";b:1;}}}}s:22:"modAccessResourceGroup";a:0:{}s:17:"modAccessCategory";a:0:{}s:28:"sources.modAccessMediaSource";a:0:{}}}modx.user.contextTokens|a:0:{}'),
+('ingpcv3ec98g0odbaqia5io775', 1368796276, 'modx.user.0.resourceGroups|a:1:{s:3:"web";a:0:{}}modx.user.0.attributes|a:1:{s:3:"web";a:4:{s:16:"modAccessContext";a:1:{s:3:"web";a:1:{i:0;a:3:{s:9:"principal";i:0;s:9:"authority";s:1:"0";s:6:"policy";a:1:{s:4:"load";b:1;}}}}s:22:"modAccessResourceGroup";a:0:{}s:17:"modAccessCategory";a:0:{}s:28:"sources.modAccessMediaSource";a:0:{}}}modx.user.contextTokens|a:0:{}'),
+('9pjls34pvrkdg0bnqr3f4l4rh5', 1368796326, 'modx.user.0.resourceGroups|a:1:{s:3:"web";a:0:{}}modx.user.0.attributes|a:1:{s:3:"web";a:4:{s:16:"modAccessContext";a:1:{s:3:"web";a:1:{i:0;a:3:{s:9:"principal";i:0;s:9:"authority";s:1:"0";s:6:"policy";a:1:{s:4:"load";b:1;}}}}s:22:"modAccessResourceGroup";a:0:{}s:17:"modAccessCategory";a:0:{}s:28:"sources.modAccessMediaSource";a:0:{}}}modx.user.contextTokens|a:0:{}'),
+('2n7dklci20a1ggj86273ua6n74', 1368796337, 'modx.user.0.resourceGroups|a:1:{s:3:"web";a:0:{}}modx.user.0.attributes|a:1:{s:3:"web";a:4:{s:16:"modAccessContext";a:1:{s:3:"web";a:1:{i:0;a:3:{s:9:"principal";i:0;s:9:"authority";s:1:"0";s:6:"policy";a:1:{s:4:"load";b:1;}}}}s:22:"modAccessResourceGroup";a:0:{}s:17:"modAccessCategory";a:0:{}s:28:"sources.modAccessMediaSource";a:0:{}}}modx.user.contextTokens|a:0:{}'),
+('r2d7dt6hqfsksaf2rstfm9pr15', 1368796416, 'modx.user.0.resourceGroups|a:1:{s:3:"web";a:0:{}}modx.user.0.attributes|a:1:{s:3:"web";a:4:{s:16:"modAccessContext";a:1:{s:3:"web";a:1:{i:0;a:3:{s:9:"principal";i:0;s:9:"authority";s:1:"0";s:6:"policy";a:1:{s:4:"load";b:1;}}}}s:22:"modAccessResourceGroup";a:0:{}s:17:"modAccessCategory";a:0:{}s:28:"sources.modAccessMediaSource";a:0:{}}}modx.user.contextTokens|a:0:{}'),
+('ljo462u8ojadvii16ejsu37cf3', 1368796431, 'modx.user.0.resourceGroups|a:1:{s:3:"web";a:0:{}}modx.user.0.attributes|a:1:{s:3:"web";a:4:{s:16:"modAccessContext";a:1:{s:3:"web";a:1:{i:0;a:3:{s:9:"principal";i:0;s:9:"authority";s:1:"0";s:6:"policy";a:1:{s:4:"load";b:1;}}}}s:22:"modAccessResourceGroup";a:0:{}s:17:"modAccessCategory";a:0:{}s:28:"sources.modAccessMediaSource";a:0:{}}}modx.user.contextTokens|a:0:{}'),
+('2nt9feg7i3k3eencvn0sk25so5', 1368796457, 'modx.user.0.resourceGroups|a:1:{s:3:"web";a:0:{}}modx.user.0.attributes|a:1:{s:3:"web";a:4:{s:16:"modAccessContext";a:1:{s:3:"web";a:1:{i:0;a:3:{s:9:"principal";i:0;s:9:"authority";s:1:"0";s:6:"policy";a:1:{s:4:"load";b:1;}}}}s:22:"modAccessResourceGroup";a:0:{}s:17:"modAccessCategory";a:0:{}s:28:"sources.modAccessMediaSource";a:0:{}}}modx.user.contextTokens|a:0:{}'),
+('ommd27g5afn5eelscijqd330e4', 1368796520, 'modx.user.0.resourceGroups|a:1:{s:3:"web";a:0:{}}modx.user.0.attributes|a:1:{s:3:"web";a:4:{s:16:"modAccessContext";a:1:{s:3:"web";a:1:{i:0;a:3:{s:9:"principal";i:0;s:9:"authority";s:1:"0";s:6:"policy";a:1:{s:4:"load";b:1;}}}}s:22:"modAccessResourceGroup";a:0:{}s:17:"modAccessCategory";a:0:{}s:28:"sources.modAccessMediaSource";a:0:{}}}modx.user.contextTokens|a:0:{}'),
+('f3g8fnm71vpckth506tegclot2', 1368796584, 'modx.user.0.resourceGroups|a:1:{s:3:"web";a:0:{}}modx.user.0.attributes|a:1:{s:3:"web";a:4:{s:16:"modAccessContext";a:1:{s:3:"web";a:1:{i:0;a:3:{s:9:"principal";i:0;s:9:"authority";s:1:"0";s:6:"policy";a:1:{s:4:"load";b:1;}}}}s:22:"modAccessResourceGroup";a:0:{}s:17:"modAccessCategory";a:0:{}s:28:"sources.modAccessMediaSource";a:0:{}}}modx.user.contextTokens|a:0:{}'),
+('fh19li4di7cml0euiecepn9ik3', 1368796621, 'modx.user.0.resourceGroups|a:1:{s:3:"web";a:0:{}}modx.user.0.attributes|a:1:{s:3:"web";a:4:{s:16:"modAccessContext";a:1:{s:3:"web";a:1:{i:0;a:3:{s:9:"principal";i:0;s:9:"authority";s:1:"0";s:6:"policy";a:1:{s:4:"load";b:1;}}}}s:22:"modAccessResourceGroup";a:0:{}s:17:"modAccessCategory";a:0:{}s:28:"sources.modAccessMediaSource";a:0:{}}}modx.user.contextTokens|a:0:{}'),
+('tglp8mcb0q0vr2btukmnpp33j2', 1368796692, 'modx.user.0.resourceGroups|a:1:{s:3:"web";a:0:{}}modx.user.0.attributes|a:1:{s:3:"web";a:4:{s:16:"modAccessContext";a:1:{s:3:"web";a:1:{i:0;a:3:{s:9:"principal";i:0;s:9:"authority";s:1:"0";s:6:"policy";a:1:{s:4:"load";b:1;}}}}s:22:"modAccessResourceGroup";a:0:{}s:17:"modAccessCategory";a:0:{}s:28:"sources.modAccessMediaSource";a:0:{}}}modx.user.contextTokens|a:0:{}'),
+('lpqcog0rmo0uj60juc59cuuso6', 1368796785, 'modx.user.0.resourceGroups|a:1:{s:3:"web";a:0:{}}modx.user.0.attributes|a:1:{s:3:"web";a:4:{s:16:"modAccessContext";a:1:{s:3:"web";a:1:{i:0;a:3:{s:9:"principal";i:0;s:9:"authority";s:1:"0";s:6:"policy";a:1:{s:4:"load";b:1;}}}}s:22:"modAccessResourceGroup";a:0:{}s:17:"modAccessCategory";a:0:{}s:28:"sources.modAccessMediaSource";a:0:{}}}modx.user.contextTokens|a:0:{}'),
+('artgqca9kkqr68c7m22k1gmp41', 1368796824, 'modx.user.0.resourceGroups|a:1:{s:3:"web";a:0:{}}modx.user.0.attributes|a:1:{s:3:"web";a:4:{s:16:"modAccessContext";a:1:{s:3:"web";a:1:{i:0;a:3:{s:9:"principal";i:0;s:9:"authority";s:1:"0";s:6:"policy";a:1:{s:4:"load";b:1;}}}}s:22:"modAccessResourceGroup";a:0:{}s:17:"modAccessCategory";a:0:{}s:28:"sources.modAccessMediaSource";a:0:{}}}'),
+('fo4v6glupjdsspseudtuvt4ne2', 1368796826, 'modx.user.0.resourceGroups|a:1:{s:3:"web";a:0:{}}modx.user.0.attributes|a:1:{s:3:"web";a:4:{s:16:"modAccessContext";a:1:{s:3:"web";a:1:{i:0;a:3:{s:9:"principal";i:0;s:9:"authority";s:1:"0";s:6:"policy";a:1:{s:4:"load";b:1;}}}}s:22:"modAccessResourceGroup";a:0:{}s:17:"modAccessCategory";a:0:{}s:28:"sources.modAccessMediaSource";a:0:{}}}'),
+('ndft58nuqhqtspoevtv4pb1kc4', 1368796894, 'modx.user.0.resourceGroups|a:1:{s:3:"web";a:0:{}}modx.user.0.attributes|a:1:{s:3:"web";a:4:{s:16:"modAccessContext";a:1:{s:3:"web";a:1:{i:0;a:3:{s:9:"principal";i:0;s:9:"authority";s:1:"0";s:6:"policy";a:1:{s:4:"load";b:1;}}}}s:22:"modAccessResourceGroup";a:0:{}s:17:"modAccessCategory";a:0:{}s:28:"sources.modAccessMediaSource";a:0:{}}}modx.user.contextTokens|a:0:{}'),
+('kre61sjpv7g96rern5ko009ei3', 1368796933, 'modx.user.0.resourceGroups|a:1:{s:3:"web";a:0:{}}modx.user.0.attributes|a:1:{s:3:"web";a:4:{s:16:"modAccessContext";a:1:{s:3:"web";a:1:{i:0;a:3:{s:9:"principal";i:0;s:9:"authority";s:1:"0";s:6:"policy";a:1:{s:4:"load";b:1;}}}}s:22:"modAccessResourceGroup";a:0:{}s:17:"modAccessCategory";a:0:{}s:28:"sources.modAccessMediaSource";a:0:{}}}modx.user.contextTokens|a:0:{}'),
+('b8bj96ndcbpep6heg7d3t74be1', 1368796980, 'modx.user.0.resourceGroups|a:1:{s:3:"web";a:0:{}}modx.user.0.attributes|a:1:{s:3:"web";a:4:{s:16:"modAccessContext";a:1:{s:3:"web";a:1:{i:0;a:3:{s:9:"principal";i:0;s:9:"authority";s:1:"0";s:6:"policy";a:1:{s:4:"load";b:1;}}}}s:22:"modAccessResourceGroup";a:0:{}s:17:"modAccessCategory";a:0:{}s:28:"sources.modAccessMediaSource";a:0:{}}}modx.user.contextTokens|a:0:{}'),
+('8881evud8k69jum38vngshv922', 1368797099, 'modx.user.0.resourceGroups|a:1:{s:3:"web";a:0:{}}modx.user.0.attributes|a:1:{s:3:"web";a:4:{s:16:"modAccessContext";a:1:{s:3:"web";a:1:{i:0;a:3:{s:9:"principal";i:0;s:9:"authority";s:1:"0";s:6:"policy";a:1:{s:4:"load";b:1;}}}}s:22:"modAccessResourceGroup";a:0:{}s:17:"modAccessCategory";a:0:{}s:28:"sources.modAccessMediaSource";a:0:{}}}modx.user.contextTokens|a:0:{}'),
+('d02fhf3gpurb346qqcdkvgvfd7', 1368797207, 'modx.user.0.resourceGroups|a:1:{s:3:"web";a:0:{}}modx.user.0.attributes|a:1:{s:3:"web";a:4:{s:16:"modAccessContext";a:1:{s:3:"web";a:1:{i:0;a:3:{s:9:"principal";i:0;s:9:"authority";s:1:"0";s:6:"policy";a:1:{s:4:"load";b:1;}}}}s:22:"modAccessResourceGroup";a:0:{}s:17:"modAccessCategory";a:0:{}s:28:"sources.modAccessMediaSource";a:0:{}}}modx.user.contextTokens|a:0:{}'),
+('l0h39c1smdhnv5tpljlmdl07j5', 1368797256, 'modx.user.0.resourceGroups|a:1:{s:3:"web";a:0:{}}modx.user.0.attributes|a:1:{s:3:"web";a:4:{s:16:"modAccessContext";a:1:{s:3:"web";a:1:{i:0;a:3:{s:9:"principal";i:0;s:9:"authority";s:1:"0";s:6:"policy";a:1:{s:4:"load";b:1;}}}}s:22:"modAccessResourceGroup";a:0:{}s:17:"modAccessCategory";a:0:{}s:28:"sources.modAccessMediaSource";a:0:{}}}modx.user.contextTokens|a:0:{}'),
+('8cunjp6j663tb5n1qdr6j66ss2', 1368797304, 'modx.user.0.resourceGroups|a:1:{s:3:"web";a:0:{}}modx.user.0.attributes|a:1:{s:3:"web";a:4:{s:16:"modAccessContext";a:1:{s:3:"web";a:1:{i:0;a:3:{s:9:"principal";i:0;s:9:"authority";s:1:"0";s:6:"policy";a:1:{s:4:"load";b:1;}}}}s:22:"modAccessResourceGroup";a:0:{}s:17:"modAccessCategory";a:0:{}s:28:"sources.modAccessMediaSource";a:0:{}}}modx.user.contextTokens|a:0:{}'),
+('ji812a52n019ftkfjcgui44392', 1368797316, 'modx.user.0.resourceGroups|a:1:{s:3:"web";a:0:{}}modx.user.0.attributes|a:1:{s:3:"web";a:4:{s:16:"modAccessContext";a:1:{s:3:"web";a:1:{i:0;a:3:{s:9:"principal";i:0;s:9:"authority";s:1:"0";s:6:"policy";a:1:{s:4:"load";b:1;}}}}s:22:"modAccessResourceGroup";a:0:{}s:17:"modAccessCategory";a:0:{}s:28:"sources.modAccessMediaSource";a:0:{}}}modx.user.contextTokens|a:0:{}'),
+('cb25fhns8niu8bdbvpoqebdqq7', 1368797654, 'modx.user.0.resourceGroups|a:1:{s:3:"web";a:0:{}}modx.user.0.attributes|a:1:{s:3:"web";a:4:{s:16:"modAccessContext";a:1:{s:3:"web";a:1:{i:0;a:3:{s:9:"principal";i:0;s:9:"authority";s:1:"0";s:6:"policy";a:1:{s:4:"load";b:1;}}}}s:22:"modAccessResourceGroup";a:0:{}s:17:"modAccessCategory";a:0:{}s:28:"sources.modAccessMediaSource";a:0:{}}}modx.user.contextTokens|a:0:{}'),
+('dvcumbno0nldsjchlpfm795lq5', 1368797671, 'modx.user.0.resourceGroups|a:1:{s:3:"web";a:0:{}}modx.user.0.attributes|a:1:{s:3:"web";a:4:{s:16:"modAccessContext";a:1:{s:3:"web";a:1:{i:0;a:3:{s:9:"principal";i:0;s:9:"authority";s:1:"0";s:6:"policy";a:1:{s:4:"load";b:1;}}}}s:22:"modAccessResourceGroup";a:0:{}s:17:"modAccessCategory";a:0:{}s:28:"sources.modAccessMediaSource";a:0:{}}}modx.user.contextTokens|a:0:{}'),
+('3elq02ujlhsg3rouini65sk7b2', 1368797830, 'modx.user.0.resourceGroups|a:1:{s:3:"web";a:0:{}}modx.user.0.attributes|a:1:{s:3:"web";a:4:{s:16:"modAccessContext";a:1:{s:3:"web";a:1:{i:0;a:3:{s:9:"principal";i:0;s:9:"authority";s:1:"0";s:6:"policy";a:1:{s:4:"load";b:1;}}}}s:22:"modAccessResourceGroup";a:0:{}s:17:"modAccessCategory";a:0:{}s:28:"sources.modAccessMediaSource";a:0:{}}}modx.user.contextTokens|a:0:{}'),
+('aa93flntgkdkb3h7t4euvbdsh1', 1368797838, 'modx.user.0.resourceGroups|a:1:{s:3:"web";a:0:{}}modx.user.0.attributes|a:1:{s:3:"web";a:4:{s:16:"modAccessContext";a:1:{s:3:"web";a:1:{i:0;a:3:{s:9:"principal";i:0;s:9:"authority";s:1:"0";s:6:"policy";a:1:{s:4:"load";b:1;}}}}s:22:"modAccessResourceGroup";a:0:{}s:17:"modAccessCategory";a:0:{}s:28:"sources.modAccessMediaSource";a:0:{}}}modx.user.contextTokens|a:0:{}'),
+('ikbgplrm7remtl8q6568kio0c4', 1368797990, 'modx.user.0.resourceGroups|a:1:{s:3:"web";a:0:{}}modx.user.0.attributes|a:1:{s:3:"web";a:4:{s:16:"modAccessContext";a:1:{s:3:"web";a:1:{i:0;a:3:{s:9:"principal";i:0;s:9:"authority";s:1:"0";s:6:"policy";a:1:{s:4:"load";b:1;}}}}s:22:"modAccessResourceGroup";a:0:{}s:17:"modAccessCategory";a:0:{}s:28:"sources.modAccessMediaSource";a:0:{}}}modx.user.contextTokens|a:0:{}'),
+('rt27pa98h8uajt48rfjbe2tbn5', 1368797996, 'modx.user.0.resourceGroups|a:1:{s:3:"web";a:0:{}}modx.user.0.attributes|a:1:{s:3:"web";a:4:{s:16:"modAccessContext";a:1:{s:3:"web";a:1:{i:0;a:3:{s:9:"principal";i:0;s:9:"authority";s:1:"0";s:6:"policy";a:1:{s:4:"load";b:1;}}}}s:22:"modAccessResourceGroup";a:0:{}s:17:"modAccessCategory";a:0:{}s:28:"sources.modAccessMediaSource";a:0:{}}}modx.user.contextTokens|a:0:{}'),
+('1fl2u7tnra3ev5t9kcmhel0fv6', 1368798413, 'modx.user.0.resourceGroups|a:1:{s:3:"web";a:0:{}}modx.user.0.attributes|a:1:{s:3:"web";a:4:{s:16:"modAccessContext";a:1:{s:3:"web";a:1:{i:0;a:3:{s:9:"principal";i:0;s:9:"authority";s:1:"0";s:6:"policy";a:1:{s:4:"load";b:1;}}}}s:22:"modAccessResourceGroup";a:0:{}s:17:"modAccessCategory";a:0:{}s:28:"sources.modAccessMediaSource";a:0:{}}}modx.user.contextTokens|a:0:{}'),
+('6s3lodiodi7mja330etvqnmcc6', 1368798416, 'modx.user.0.resourceGroups|a:1:{s:3:"web";a:0:{}}modx.user.0.attributes|a:1:{s:3:"web";a:4:{s:16:"modAccessContext";a:1:{s:3:"web";a:1:{i:0;a:3:{s:9:"principal";i:0;s:9:"authority";s:1:"0";s:6:"policy";a:1:{s:4:"load";b:1;}}}}s:22:"modAccessResourceGroup";a:0:{}s:17:"modAccessCategory";a:0:{}s:28:"sources.modAccessMediaSource";a:0:{}}}modx.user.contextTokens|a:0:{}'),
+('hj316h26rqu2o7r4pd765a0si4', 1368798519, 'modx.user.0.resourceGroups|a:1:{s:3:"web";a:0:{}}modx.user.0.attributes|a:1:{s:3:"web";a:4:{s:16:"modAccessContext";a:1:{s:3:"web";a:1:{i:0;a:3:{s:9:"principal";i:0;s:9:"authority";s:1:"0";s:6:"policy";a:1:{s:4:"load";b:1;}}}}s:22:"modAccessResourceGroup";a:0:{}s:17:"modAccessCategory";a:0:{}s:28:"sources.modAccessMediaSource";a:0:{}}}modx.user.contextTokens|a:0:{}'),
+('591b1tssh06dnemg9e672eihn7', 1368798536, 'modx.user.0.resourceGroups|a:1:{s:3:"web";a:0:{}}modx.user.0.attributes|a:1:{s:3:"web";a:4:{s:16:"modAccessContext";a:1:{s:3:"web";a:1:{i:0;a:3:{s:9:"principal";i:0;s:9:"authority";s:1:"0";s:6:"policy";a:1:{s:4:"load";b:1;}}}}s:22:"modAccessResourceGroup";a:0:{}s:17:"modAccessCategory";a:0:{}s:28:"sources.modAccessMediaSource";a:0:{}}}modx.user.contextTokens|a:0:{}'),
+('6c2eprk39quifc364nhieltse4', 1368798828, 'modx.user.0.resourceGroups|a:1:{s:3:"web";a:0:{}}modx.user.0.attributes|a:1:{s:3:"web";a:4:{s:16:"modAccessContext";a:1:{s:3:"web";a:1:{i:0;a:3:{s:9:"principal";i:0;s:9:"authority";s:1:"0";s:6:"policy";a:1:{s:4:"load";b:1;}}}}s:22:"modAccessResourceGroup";a:0:{}s:17:"modAccessCategory";a:0:{}s:28:"sources.modAccessMediaSource";a:0:{}}}modx.user.contextTokens|a:0:{}'),
+('3qnqpu7f3i6kbo0katdm2cu467', 1368798837, 'modx.user.0.resourceGroups|a:1:{s:3:"web";a:0:{}}modx.user.0.attributes|a:1:{s:3:"web";a:4:{s:16:"modAccessContext";a:1:{s:3:"web";a:1:{i:0;a:3:{s:9:"principal";i:0;s:9:"authority";s:1:"0";s:6:"policy";a:1:{s:4:"load";b:1;}}}}s:22:"modAccessResourceGroup";a:0:{}s:17:"modAccessCategory";a:0:{}s:28:"sources.modAccessMediaSource";a:0:{}}}modx.user.contextTokens|a:0:{}');
 
 -- --------------------------------------------------------
 
@@ -1619,7 +1680,7 @@ CREATE TABLE IF NOT EXISTS `modx_site_content` (
 --
 
 INSERT INTO `modx_site_content` (`id`, `type`, `contentType`, `pagetitle`, `longtitle`, `description`, `alias`, `link_attributes`, `published`, `pub_date`, `unpub_date`, `parent`, `isfolder`, `introtext`, `content`, `richtext`, `template`, `menuindex`, `searchable`, `cacheable`, `createdby`, `createdon`, `editedby`, `editedon`, `deleted`, `deletedon`, `deletedby`, `publishedon`, `publishedby`, `menutitle`, `donthit`, `privateweb`, `privatemgr`, `content_dispo`, `hidemenu`, `class_key`, `context_key`, `content_type`, `uri`, `uri_override`, `hide_children_in_tree`, `show_in_tree`, `properties`) VALUES
-(1, 'document', 'text/html', 'Home', '', '', 'index', '', 1, 0, 0, 0, 0, NULL, '', 1, 1, 0, 1, 1, 1, 1368690675, 0, 0, 0, 0, 0, 0, 0, '', 0, 0, 0, 0, 0, 'modDocument', 'web', 1, NULL, 0, 0, 1, NULL);
+(1, 'document', 'text/html', 'Home', '', '', 'index', '', 1, 0, 0, 0, 0, '', '[[!create]]', 1, 1, 0, 1, 1, 1, 1368690675, 1, 1368795853, 0, 0, 0, 0, 0, '', 0, 0, 0, 0, 0, 'modDocument', 'web', 1, '', 0, 0, 1, NULL);
 
 -- --------------------------------------------------------
 
@@ -1720,7 +1781,14 @@ CREATE TABLE IF NOT EXISTS `modx_site_snippets` (
   KEY `locked` (`locked`),
   KEY `moduleguid` (`moduleguid`),
   KEY `static` (`static`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2 ;
+
+--
+-- Дамп данных таблицы `modx_site_snippets`
+--
+
+INSERT INTO `modx_site_snippets` (`id`, `source`, `property_preprocess`, `name`, `description`, `editor_type`, `category`, `cache_type`, `snippet`, `locked`, `properties`, `moduleguid`, `static`, `static_file`) VALUES
+(1, 1, 0, 'create', '', 0, 0, 0, '$wm = $modx->getService(''woolmart'', ''WoolMart'', $modx->getOption(''woolmart.core_path'', null, $modx->getOption(''core_path'') . ''components/woolmart/'') . ''model/woolmart/'', $scriptProperties);\r\nif (!($wm instanceof WoolMart))\r\n    return '''';\r\n$m = $modx->getManager();\r\n$m->createObjectContainer(''WoolCatExtension'');\r\n$m->createObjectContainer(''WoolProducts'');\r\n$m->createObjectContainer(''WoolCatProducts'');\r\n$m->createObjectContainer(''WoolVendors'');\r\n$m->createObjectContainer(''WoolLinks'');\r\n$m->createObjectContainer(''WoolProductLinks'');\r\n$m->createObjectContainer(''WoolStores'');\r\n$m->createObjectContainer(''WoolProductQuantity'');\r\n$m->createObjectContainer(''WoolProductMemberPrices'');\r\n$m->createObjectContainer(''WoolOptions'');\r\n$m->createObjectContainer(''WoolOptionValues'');\r\n$m->createObjectContainer(''WoolCatOptions'');\r\necho ''well done'';', 0, 'a:0:{}', '', 1, 'woolmart/core/components/woolmart/elements/snippets/create.woolmart.php');
 
 -- --------------------------------------------------------
 
@@ -2249,8 +2317,8 @@ INSERT INTO `modx_system_settings` (`key`, `value`, `xtype`, `namespace`, `area`
 ('xhtml_urls', '1', 'combo-boolean', 'core', 'site', '0000-00-00 00:00:00'),
 ('settings_version', '2.2.7-pl', 'textfield', 'core', 'system', '0000-00-00 00:00:00'),
 ('settings_distro', 'traditional', 'textfield', 'core', 'system', '0000-00-00 00:00:00'),
-('woolmart.core_path', '/woolmart/core/components/woolmart/', 'textfield', 'core', '', '0000-00-00 00:00:00'),
-('woolmart.assets_path', '/woolmart/assets/components/woolmart/', 'textfield', 'core', '', '0000-00-00 00:00:00');
+('woolmart.core_path', 'C:/Program Files (x86)/Ampps/www/woolmart.ru/woolmart/core/components/woolmart/', 'textfield', 'core', '', '2013-05-17 13:12:50'),
+('woolmart.assets_path', 'woolmart.ru/assets/components/woolmart/', 'textfield', 'core', '', '2013-05-17 13:13:17');
 
 -- --------------------------------------------------------
 
@@ -2349,7 +2417,7 @@ CREATE TABLE IF NOT EXISTS `modx_users` (
 --
 
 INSERT INTO `modx_users` (`id`, `username`, `password`, `cachepwd`, `class_key`, `active`, `remote_key`, `remote_data`, `hash_class`, `salt`, `primary_group`, `session_stale`, `sudo`) VALUES
-(1, 'admin', '2M/Vv+nApJJvF3QD0tqEKxY/K0SuAFFpB9OnKH5E/mE=', '', 'modUser', 1, NULL, NULL, 'hashing.modPBKDF2', 'e4c0915f7267f2185a8d0fe23b6fde04', 1, NULL, 1);
+(1, 'admin', '2M/Vv+nApJJvF3QD0tqEKxY/K0SuAFFpB9OnKH5E/mE=', '', 'modUser', 1, NULL, NULL, 'hashing.modPBKDF2', 'e4c0915f7267f2185a8d0fe23b6fde04', 1, 'a:2:{i:0;s:3:"mgr";i:1;s:3:"web";}', 1);
 
 -- --------------------------------------------------------
 
@@ -2393,7 +2461,7 @@ CREATE TABLE IF NOT EXISTS `modx_user_attributes` (
 --
 
 INSERT INTO `modx_user_attributes` (`id`, `internalKey`, `fullname`, `email`, `phone`, `mobilephone`, `blocked`, `blockeduntil`, `blockedafter`, `logincount`, `lastlogin`, `thislogin`, `failedlogincount`, `sessionid`, `dob`, `gender`, `address`, `country`, `city`, `state`, `zip`, `fax`, `photo`, `comment`, `website`, `extended`) VALUES
-(1, 1, 'Учётная запись администратора по умолчанию', 'hetzerok@gmail.com', '', '', 0, 0, 0, 1, 0, 1368690693, 0, '5sh2p463p40cg44cmu0qqcn596', 0, 0, '', '', '', '', '', '', '', '', '', NULL);
+(1, 1, 'Учётная запись администратора по умолчанию', 'hetzerok@gmail.com', '', '', 0, 0, 0, 2, 1368690693, 1368781378, 0, 'v1na37elgqjjsvaspv6min7nf7', 0, 0, '', '', '', '', '', '', '', '', '', NULL);
 
 -- --------------------------------------------------------
 
@@ -2454,6 +2522,230 @@ CREATE TABLE IF NOT EXISTS `modx_user_settings` (
   `editedon` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00' ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`user`,`key`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
+-- Структура таблицы `modx_wool_cat_extension`
+--
+
+CREATE TABLE IF NOT EXISTS `modx_wool_cat_extension` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `producttemplate` int(10) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`),
+  KEY `producttemplate` (`producttemplate`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
+
+--
+-- Структура таблицы `modx_wool_cat_options`
+--
+
+CREATE TABLE IF NOT EXISTS `modx_wool_cat_options` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `optionid` int(10) NOT NULL DEFAULT '0',
+  `catid` int(10) NOT NULL DEFAULT '0',
+  `disabled` tinyint(1) unsigned NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`),
+  KEY `optionid` (`optionid`),
+  KEY `catid` (`catid`),
+  KEY `disabled` (`disabled`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
+
+--
+-- Структура таблицы `modx_wool_cat_products`
+--
+
+CREATE TABLE IF NOT EXISTS `modx_wool_cat_products` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `productid` int(10) NOT NULL DEFAULT '0',
+  `catid` int(10) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`),
+  KEY `productid` (`productid`),
+  KEY `catid` (`catid`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
+
+--
+-- Структура таблицы `modx_wool_links`
+--
+
+CREATE TABLE IF NOT EXISTS `modx_wool_links` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `type` varchar(100) NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `description` varchar(255) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `type` (`type`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
+
+--
+-- Структура таблицы `modx_wool_options`
+--
+
+CREATE TABLE IF NOT EXISTS `modx_wool_options` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(50) NOT NULL DEFAULT '',
+  `description` varchar(255) NOT NULL DEFAULT '',
+  `type` varchar(50) NOT NULL DEFAULT '',
+  `handler` varchar(50) NOT NULL DEFAULT '',
+  `structure` varchar(50) NOT NULL DEFAULT '',
+  `rank` int(10) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `name` (`name`),
+  KEY `rank` (`rank`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
+
+--
+-- Структура таблицы `modx_wool_option_values`
+--
+
+CREATE TABLE IF NOT EXISTS `modx_wool_option_values` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `optionid` int(10) NOT NULL DEFAULT '0',
+  `productid` int(10) NOT NULL DEFAULT '0',
+  `value` mediumtext NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `optionid` (`optionid`),
+  KEY `productid` (`productid`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
+
+--
+-- Структура таблицы `modx_wool_products`
+--
+
+CREATE TABLE IF NOT EXISTS `modx_wool_products` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `pagetitle` varchar(255) NOT NULL DEFAULT '',
+  `longtitle` varchar(255) NOT NULL DEFAULT '',
+  `description` varchar(255) NOT NULL DEFAULT '',
+  `introtext` text,
+  `content` mediumtext,
+  `createdon` int(20) NOT NULL DEFAULT '0',
+  `publishedon` int(20) NOT NULL DEFAULT '0',
+  `deletedon` int(20) NOT NULL DEFAULT '0',
+  `published` tinyint(1) unsigned NOT NULL DEFAULT '0',
+  `deleted` tinyint(1) unsigned NOT NULL DEFAULT '0',
+  `hidemenu` tinyint(1) unsigned NOT NULL DEFAULT '0',
+  `template` int(10) NOT NULL DEFAULT '0',
+  `menuindex` int(10) NOT NULL DEFAULT '0',
+  `alias` varchar(255) DEFAULT '',
+  `uri` varchar(1000) DEFAULT '',
+  `article` varchar(50) DEFAULT NULL,
+  `price` decimal(12,2) NOT NULL DEFAULT '0.00',
+  `old_price` decimal(12,2) NOT NULL DEFAULT '0.00',
+  `image` varchar(255) DEFAULT NULL,
+  `weight` decimal(13,3) NOT NULL DEFAULT '0.000',
+  `new` tinyint(1) unsigned NOT NULL DEFAULT '0',
+  `popular` tinyint(1) unsigned NOT NULL DEFAULT '0',
+  `favorite` tinyint(1) unsigned NOT NULL DEFAULT '0',
+  `vendor` int(10) unsigned NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`),
+  KEY `published` (`published`),
+  KEY `deleted` (`deleted`),
+  KEY `hidemenu` (`hidemenu`),
+  KEY `template` (`template`),
+  KEY `menuindex` (`menuindex`),
+  KEY `alias` (`alias`),
+  KEY `uri` (`uri`(333)),
+  KEY `article` (`article`),
+  KEY `price` (`price`),
+  KEY `old_price` (`old_price`),
+  KEY `weight` (`weight`),
+  KEY `new` (`new`),
+  KEY `popular` (`popular`),
+  KEY `favorite` (`favorite`),
+  KEY `vendor` (`vendor`),
+  FULLTEXT KEY `content_ft_idx` (`pagetitle`,`longtitle`,`description`,`introtext`,`content`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
+
+--
+-- Структура таблицы `modx_wool_product_links`
+--
+
+CREATE TABLE IF NOT EXISTS `modx_wool_product_links` (
+  `link` int(10) unsigned NOT NULL,
+  `master` int(10) unsigned NOT NULL,
+  `slave` int(10) unsigned NOT NULL,
+  KEY `link` (`link`),
+  KEY `master` (`master`),
+  KEY `slave` (`slave`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
+-- Структура таблицы `modx_wool_product_member_prices`
+--
+
+CREATE TABLE IF NOT EXISTS `modx_wool_product_member_prices` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `productid` int(10) NOT NULL DEFAULT '0',
+  `groupid` int(10) NOT NULL DEFAULT '0',
+  `price` decimal(12,2) NOT NULL DEFAULT '0.00',
+  PRIMARY KEY (`id`),
+  KEY `productid` (`productid`),
+  KEY `groupid` (`groupid`),
+  KEY `price` (`price`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
+
+--
+-- Структура таблицы `modx_wool_product_quantity`
+--
+
+CREATE TABLE IF NOT EXISTS `modx_wool_product_quantity` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `productid` int(10) NOT NULL DEFAULT '0',
+  `storeid` int(10) NOT NULL DEFAULT '0',
+  `quantity` int(10) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`),
+  KEY `productid` (`productid`),
+  KEY `storeid` (`storeid`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
+
+--
+-- Структура таблицы `modx_wool_stores`
+--
+
+CREATE TABLE IF NOT EXISTS `modx_wool_stores` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(100) NOT NULL,
+  `resource` int(10) unsigned DEFAULT '0',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `name` (`name`),
+  KEY `resource` (`resource`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
+
+--
+-- Структура таблицы `modx_wool_vendors`
+--
+
+CREATE TABLE IF NOT EXISTS `modx_wool_vendors` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(100) NOT NULL,
+  `resource` int(10) unsigned DEFAULT '0',
+  PRIMARY KEY (`id`),
+  KEY `name` (`name`),
+  KEY `resource` (`resource`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 

@@ -1,52 +1,60 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <model package="woolmart" baseClass="xPDOObject" platform="mysql" defaultEngine="MyISAM">
     
-    <object class="WoolCategories" table="wool_categories" extends="xPDOSimpleObject">
-        <!-- Текстовые поля -->
+    <object class="WoolCategories" extends="modResource" >       
+        <field key="class_key" dbtype="varchar" precision="100" phptype="string" null="false" default="woolCategory" />
+        
+        <composite alias="CatExtension" class="WoolCatExtension" local="id" foreign="id" cardinality="one" owner="local" />
+        <aggregate alias="Products" class="WoolCatProducts" local="id" foreign="catid" cardinality="many" owner="local" />
+        <aggregate alias="CurrentOptions" class="WoolCatOptions" local="id" foreign="catid" cardinality="many" owner="local" />
+    </object>    
+        
+    <object class="WoolCatExtension" table="wool_cat_extension" extends="xPDOSimpleObject">
+        <field key="producttemplate" dbtype="int" precision="10" phptype="integer" null="false" default="0" index="index" />
+        
+        <index alias="producttemplate" name="producttemplate" primary="false" unique="false" type="BTREE">
+            <column key="producttemplate" length="" collation="A" null="false" />
+        </index>
+        
+        <aggregate alias="ProductTemplate" class="modTemplate" local="producttemplate" foreign="id" cardinality="one" owner="foreign" />
+        <aggregate alias="Category" class="WoolCategories" local="id" foreign="id" cardinality="one" owner="foreign" />
+        <aggregate alias="Products" class="WoolCatProducts" local="id" foreign="catid" cardinality="many" owner="local" />
+    </object> 
+    
+    <object class="WoolProducts" table="wool_products" extends="xPDOSimpleObject">
         <field key="pagetitle" dbtype="varchar" precision="255" phptype="string" null="false" default="" index="fulltext" indexgrp="content_ft_idx" />
         <field key="longtitle" dbtype="varchar" precision="255" phptype="string" null="false" default="" index="fulltext" indexgrp="content_ft_idx" />
         <field key="description" dbtype="varchar" precision="255" phptype="string" null="false" default="" index="fulltext" indexgrp="content_ft_idx" />       
         <field key="introtext" dbtype="text" phptype="string" index="fulltext" indexgrp="content_ft_idx" />
         <field key="content" dbtype="mediumtext" phptype="string" index="fulltext" indexgrp="content_ft_idx" />
-        <!-- Создано, опубликовано, удалено -->
         <field key="createdon" dbtype="int" precision="20" phptype="timestamp" null="false" default="0" />
         <field key="publishedon" dbtype="int" precision="20" phptype="timestamp" null="false" default="0" />
         <field key="deletedon" dbtype="int" precision="20" phptype="timestamp" null="false" default="0" />             
-        <!-- Флаги публикации, удаления и отображения в меню -->
         <field key="published" dbtype="tinyint" precision="1" attributes="unsigned" phptype="boolean" null="false" default="0" index="index" />
         <field key="deleted" dbtype="tinyint" precision="1" attributes="unsigned" phptype="boolean" null="false" default="0" index="index" />
         <field key="hidemenu" dbtype="tinyint" precision="1" attributes="unsigned" phptype="boolean" null="false" default="0" index="index" />
-        <!-- Шаблоны категории и товаров внутри -->
-        <field key="template" dbtype="int" precision="10" phptype="integer" null="false" default="0" index="index" />
-        <field key="producttemplate" dbtype="int" precision="10" phptype="integer" null="false" default="0" index="index" />
-        <!-- Позиция в меню -->
+        <field key="template" dbtype="int" precision="10" phptype="integer" null="false" default="0" index="index" />       
         <field key="menuindex" dbtype="int" precision="10" phptype="integer" null="false" default="0" index="index" />
-        <!-- Строим дерево категорий -->
-        <field key="parent" dbtype="int" precision="10" phptype="integer" null="false" default="0" index="index" />
-        <!-- Флаг вершины дерева -->
-        <field key="apex" dbtype="tinyint" precision="1" attributes="unsigned" phptype="boolean" null="false" default="0" index="index" />
-        <!-- Алиас для ЧПУ -->
         <field key="alias" dbtype="varchar" precision="255" phptype="string" null="true" default="" index="index" />
-        <!-- УРЛ для ЧПУ -->
-        <field key="uri" dbtype="text" phptype="string" null="true" index="index" />
+        <field key="uri" dbtype="varchar" precision="1000" phptype="string" null="true" default="" index="index" />
+        <field key="article" dbtype="varchar" precision="50" phptype="varchar" null="true" index="index"/>
+        <field key="price" dbtype="decimal" precision="12,2" phptype="float" null="false" default="0" index="index" />
+        <field key="old_price" dbtype="decimal" precision="12,2" phptype="float" null="false" default="0" index="index" />
+        <field key="image" dbtype="varchar" precision="255" phptype="string" null="true"/>
+        <field key="weight" dbtype="decimal" precision="13,3" phptype="float" null="false" default="0" index="index"/>
+        <field key="new" dbtype="tinyint" precision="1" attributes="unsigned" phptype="boolean" null="false" default="0" index="index" />
+        <field key="popular" dbtype="tinyint" precision="1" attributes="unsigned" phptype="boolean" null="false" default="0" index="index" />
+        <field key="favorite" dbtype="tinyint" precision="1" attributes="unsigned" phptype="boolean" null="false" default="0" index="index" />
+        <field key="vendor" dbtype="int" precision="10" attributes="unsigned" phptype="integer" null="false" default="0" index="index"/>
         
         <index alias="alias" name="alias" primary="false" unique="false" type="BTREE">
             <column key="alias" length="" collation="A" null="true" />
         </index>
-        <index alias="apex" name="apex" primary="false" unique="false" type="BTREE">
-            <column key="apex" length="" collation="A" null="false" />
-        </index>
         <index alias="published" name="published" primary="false" unique="false" type="BTREE">
             <column key="published" length="" collation="A" null="false" />
         </index>
-        <index alias="parent" name="parent" primary="false" unique="false" type="BTREE">
-            <column key="parent" length="" collation="A" null="false" />
-        </index>
         <index alias="template" name="template" primary="false" unique="false" type="BTREE">
             <column key="template" length="" collation="A" null="false" />
-        </index>
-        <index alias="producttemplate" name="producttemplate" primary="false" unique="false" type="BTREE">
-            <column key="producttemplate" length="" collation="A" null="false" />
         </index>
         <index alias="menuindex" name="menuindex" primary="false" unique="false" type="BTREE">
             <column key="menuindex" length="" collation="A" null="false" />
@@ -58,7 +66,31 @@
             <column key="hidemenu" length="" collation="A" null="false" />
         </index>
         <index alias="uri" name="uri" primary="false" unique="false" type="BTREE">
-            <column key="uri" length="1000" collation="A" null="true" />
+            <column key="uri" length="" collation="A" null="true" />
+        </index>     
+        <index alias="article" name="article" primary="false" unique="false" type="BTREE">
+            <column key="article" length="" collation="A" null="true" />
+        </index>
+        <index alias="price" name="price" primary="false" unique="false" type="BTREE">
+            <column key="price" length="" collation="A" null="true" />
+        </index>
+        <index alias="old_price" name="old_price" primary="false" unique="false" type="BTREE">
+            <column key="old_price" length="" collation="A" null="true" />
+        </index>
+        <index alias="weight" name="weight" primary="false" unique="false" type="BTREE">
+            <column key="weight" length="" collation="A" null="true" />
+        </index>
+        <index alias="new" name="new" primary="false" unique="false" type="BTREE">
+            <column key="new" length="" collation="A" null="true" />
+        </index>
+        <index alias="popular" name="popular" primary="false" unique="false" type="BTREE">
+            <column key="popular" length="" collation="A" null="true" />
+        </index>
+        <index alias="favorite" name="favorite" primary="false" unique="false" type="BTREE">
+            <column key="favorite" length="" collation="A" null="true" />
+        </index>
+        <index alias="vendor" name="vendor" primary="false" unique="false" type="BTREE">
+            <column key="vendor" length="" collation="A" null="true" />
         </index>
         <index alias="content_ft_idx" name="content_ft_idx" primary="false" unique="false" type="FULLTEXT">
             <column key="pagetitle" length="" collation="A" null="false" />
@@ -68,38 +100,170 @@
             <column key="content" length="" collation="A" null="true" />
         </index>
         <index alias="cache_refresh_index" name="cache_refresh_idx" primary="false" unique="false" type="BTREE">
-            <column key="parent" length="" collation="A" null="false" />
             <column key="menuindex" length="" collation="A" null="false" />
             <column key="id" length="" collation="A" null="false" />
         </index>
- 
-        <aggregate alias="Template" class="modTemplate" local="template" foreign="id" cardinality="one" owner="foreign" />
-        <aggregate alias="ProductTemplate" class="modTemplate" local="producttemplate" foreign="id" cardinality="one" owner="foreign" />
+        
+        <aggregate alias="Template" class="WoolVendors" local="vendor" foreign="id" cardinality="one" owner="foreign" />
+        <aggregate alias="Vendor" class="modTemplate" local="template" foreign="id" cardinality="one" owner="foreign" />
+        <aggregate alias="Categories" class="WoolCategories" local="id" foreign="catid" cardinality="many" owner="local" />
+        <aggregate alias="CommonPattern" class="WoolCatExtension" local="id" foreign="catid" cardinality="many" owner="local" />
+        <aggregate alias="Masters" class="WoolProductLinks" local="id" foreign="slave" cardinality="many" owner="local" />
+        <aggregate alias="Slaves" class="WoolProductLinks" local="id" foreign="master" cardinality="many" owner="local" />
+        <aggregate alias="Quantity" class="WoolProductQuantity" local="id" foreign="productid" cardinality="many" owner="local" />
+        <aggregate alias="MemberPrices" class="WoolProductMemberPrices" local="id" foreign="productid" cardinality="many" owner="local" />       
     </object>
     
-    <object class="WoolProducts" table="wool_products" extends="xPDOSimpleObject">
-        <!-- Текстовые поля -->
-        <field key="pagetitle" dbtype="varchar" precision="255" phptype="string" null="false" default="" index="fulltext" indexgrp="content_ft_idx" />
-        <field key="longtitle" dbtype="varchar" precision="255" phptype="string" null="false" default="" index="fulltext" indexgrp="content_ft_idx" />
-        <field key="description" dbtype="varchar" precision="255" phptype="string" null="false" default="" index="fulltext" indexgrp="content_ft_idx" />       
-        <field key="introtext" dbtype="text" phptype="string" index="fulltext" indexgrp="content_ft_idx" />
-        <field key="content" dbtype="mediumtext" phptype="string" index="fulltext" indexgrp="content_ft_idx" />
-        <!-- Создано, опубликовано, удалено -->
-        <field key="createdon" dbtype="int" precision="20" phptype="timestamp" null="false" default="0" />
-        <field key="publishedon" dbtype="int" precision="20" phptype="timestamp" null="false" default="0" />
-        <field key="deletedon" dbtype="int" precision="20" phptype="timestamp" null="false" default="0" />             
-        <!-- Флаги публикации, удаления и отображения в меню -->
-        <field key="published" dbtype="tinyint" precision="1" attributes="unsigned" phptype="boolean" null="false" default="0" index="index" />
-        <field key="deleted" dbtype="tinyint" precision="1" attributes="unsigned" phptype="boolean" null="false" default="0" index="index" />
-        <field key="hidemenu" dbtype="tinyint" precision="1" attributes="unsigned" phptype="boolean" null="false" default="0" index="index" />
-        <!-- Позиция в меню -->
-        <field key="menuindex" dbtype="int" precision="10" phptype="integer" null="false" default="0" index="index" />
-        <!-- Строим дерево категорий -->
-        <field key="parent" dbtype="int" precision="10" phptype="integer" null="false" default="0" index="index" />
-        <!-- Алиас для ЧПУ -->
-        <field key="alias" dbtype="varchar" precision="255" phptype="string" null="true" default="" index="index" />
-        <!-- УРЛ для ЧПУ -->
-        <field key="uri" dbtype="text" phptype="string" null="true" index="index" />
-    </object>    
+    <object class="WoolCatProducts" table="wool_cat_products" extends="xPDOSimpleObject">
+        <field key="productid" dbtype="int" precision="10" phptype="integer" null="false" default="0" index="index" />
+        <field key="catid" dbtype="int" precision="10" phptype="integer" null="false" default="0" index="index" />
+        
+        <index alias="catproduct" name="catproduct" primary="true" unique="true" type="BTREE" >
+            <column key="productid" length="" collation="A" null="false" />
+            <column key="catid" length="" collation="A" null="false" />
+        </index>
+        
+        <aggregate alias="Product" class="WoolProducts" local="productid" foreign="id" cardinality="one" owner="foreign" />
+        <aggregate alias="Category" class="WoolCategories" local="catid" foreign="id" cardinality="one" owner="foreign" />
+        <aggregate alias="CommonPattern" class="WoolCatExtension" local="catid" foreign="id" cardinality="one" owner="foreign" />
+    </object>
     
+    <object class="WoolVendors" table="wool_vendors" extends="xPDOSimpleObject">
+        <field key="name" dbtype="varchar" precision="100" phptype="string" null="false" index="index" />
+        <field key="resource" dbtype="int" precision="10" attributes="unsigned" phptype="integer" null="true" default="0" index="index" />
+        
+        <index alias="name" name="name" primary="false" unique="true" type="BTREE" >
+            <column key="name" length="" collation="A" null="false" />
+        </index>
+        <index alias="resource" name="resource" primary="false" unique="true" type="BTREE" >
+            <column key="resource" length="" collation="A" null="false" />
+        </index>
+        
+        <aggregate alias="Products" class="WoolProducts" local="id" foreign="vendor" cardinality="many" owner="local" />
+        <aggregate alias="Resource" class="modResource" local="resource" foreign="id" cardinality="one" owner="local" />      
+    </object>
+    
+    <object class="WoolLinks" table="wool_links" extends="xPDOSimpleObject">
+        <field key="type" dbtype="varchar" precision="100" phptype="string" null="false" index="index" />
+        <field key="name" dbtype="varchar" precision="255" phptype="string" null="false" />
+        <field key="description" dbtype="varchar" precision="255" phptype="string" null="false" />
+
+        <index alias="type" name="type" primary="false" unique="false" type="BTREE" >
+            <column key="type" length="" collation="A" null="false" />
+        </index>
+
+        <aggregate alias="Links" class="WoolProductLink" local="id" foreign="link" owner="local" cardinality="many" />
+    </object>
+
+
+    <object class="WoolProductLinks" table="wool_product_links" extends="xPDOObject">
+        <field key="link" dbtype="int" precision="10" phptype="integer" attributes="unsigned" null="false" index="index" />
+        <field key="master" dbtype="int" precision="10" phptype="integer" attributes="unsigned" null="false" index="index" />
+        <field key="slave" dbtype="int" precision="10" phptype="integer" attributes="unsigned" null="false" index="index" />
+
+        <index alias="link" name="link" primary="true" unique="true" type="BTREE" >
+            <column key="link" length="" collation="A" null="false" />
+            <column key="master" length="" collation="A" null="false" />
+            <column key="slave" length="" collation="A" null="false" />
+        </index>
+
+        <aggregate alias="Link" class="WoolLinks" local="link" foreign="id" owner="foreign" cardinality="one" />
+        <aggregate alias="Master" class="WoolProducts" local="master" foreign="id" owner="foreign" cardinality="one" />
+        <aggregate alias="Slave" class="WoolProducts" local="slave" foreign="id" owner="foreign" cardinality="one" />
+    </object>
+    
+    <object class="WoolStores" table="wool_stores" extends="xPDOSimpleObject">
+        <field key="name" dbtype="varchar" precision="100" phptype="string" null="false" index="unique" />
+        <field key="resource" dbtype="int" precision="10" attributes="unsigned" phptype="integer" null="true" default="0" index="index" />
+    
+        <index alias="name" name="name" primary="false" unique="true" type="BTREE" >
+            <column key="name" length="" collation="A" null="false" />
+        </index>
+        <index alias="resource" name="resource" primary="false" unique="true" type="BTREE" >
+            <column key="resource" length="" collation="A" null="false" />
+        </index>
+        
+        <aggregate alias="Products" class="WoolProductQuantity" local="id" foreign="storeid" cardinality="many" owner="local" />
+        <aggregate alias="Resource" class="modResource" local="resource" foreign="id" cardinality="one" owner="local" />
+    </object>
+    
+    <object class="WoolProductQuantity" table="wool_product_quantity" extends="xPDOSimpleObject">
+        <field key="productid" dbtype="int" precision="10" phptype="integer" null="false" default="0" index="index" />
+        <field key="storeid" dbtype="int" precision="10" phptype="integer" null="false" default="0" index="index" />
+        <field key="quantity" dbtype="int" precision="10" phptype="integer" null="false" default="0" />
+        
+        <index alias="productquantity" name="productquantity" primary="true" unique="true" type="BTREE" >
+            <column key="productid" length="" collation="A" null="false" />
+            <column key="catid" length="" collation="A" null="false" />
+        </index>
+        
+        <aggregate alias="Product" class="WoolProducts" local="productid" foreign="id" cardinality="one" owner="foreign" />
+        <aggregate alias="Store" class="WoolStores" local="storeid" foreign="id" cardinality="one" owner="foreign" />
+    </object>
+    
+    <object class="WoolProductMemberPrices" table="wool_product_member_prices" extends="xPDOSimpleObject">
+        <field key="productid" dbtype="int" precision="10" phptype="integer" null="false" default="0" index="index" />
+        <field key="groupid" dbtype="int" precision="10" phptype="integer" null="false" default="0" index="index" />
+        <field key="price" dbtype="decimal" precision="12,2" phptype="float" null="false" default="0" index="index" />
+        
+        <index alias="memberprice" name="memberprice" primary="true" unique="true" type="BTREE" >
+            <column key="productid" length="" collation="A" null="false" />
+            <column key="groupid" length="" collation="A" null="false" />
+        </index>
+        <index alias="price" name="price" primary="false" unique="true" type="BTREE" >
+            <column key="price" length="" collation="A" null="false" />
+        </index>
+        
+        <aggregate alias="Product" class="WoolProducts" local="productid" foreign="id" cardinality="one" owner="foreign" />
+        <aggregate alias="Membergroup" class="modUserGroup" local="groupid" foreign="id" cardinality="one" owner="foreign" />
+    </object>
+    
+    <object class="WoolOptions" table="wool_options" extends="xPDOSimpleObject">
+        <field key="name" dbtype="varchar" precision="50" phptype="string" null="false" default="" index="unique" />
+        <field key="description" dbtype="varchar" precision="255" phptype="string" null="false" default="" />
+        <field key="type" dbtype="varchar" precision="50" phptype="string" null="false" default="" />
+        <field key="handler" dbtype="varchar" precision="50" phptype="string" null="false" default="" />
+        <field key="structure" dbtype="varchar" precision="50" phptype="string" null="false" default="" />
+        <field key="rank" dbtype="int" precision="10" phptype="integer" null="false" default="0" index="index" />
+        
+        <index alias="name" name="name" primary="false" unique="true" type="BTREE">
+            <column key="name" length="" collation="A" null="false" />
+        </index>
+        <index alias="rank" name="rank" primary="false" unique="false" type="BTREE">
+            <column key="rank" length="" collation="A" null="false" />
+        </index>
+        
+        <aggregate alias="Products" class="WoolOptionValues" local="id" foreign="optionid" cardinality="many" owner="local" />
+    </object>
+    
+    <object class="WoolOptionValues" table="wool_option_values" extends="xPDOSimpleObject">
+        <field key="optionid" dbtype="int" precision="10" phptype="integer" null="false" default="0" index="index" />
+        <field key="productid" dbtype="int" precision="10" phptype="integer" null="false" default="0" index="index" />
+        <field key="value" dbtype="mediumtext" phptype="string" null="false" />
+
+        <index alias="optionvalue" name="optionvalue" primary="true" unique="true" type="BTREE" >
+            <column key="optionid" length="" collation="A" null="false" />
+            <column key="productid" length="" collation="A" null="false" />
+        </index>
+
+        <aggregate alias="Option" class="WoolOptions" local="optionid" foreign="id" cardinality="one" owner="foreign" />
+        <aggregate alias="Product" class="WoolProducts" local="productid" foreign="id" cardinality="one" owner="foreign" />
+    </object>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    
+    
+    <object class="WoolCatOptions" table="wool_cat_options" extends="xPDOSimpleObject">
+        <field key="optionid" dbtype="int" precision="10" phptype="integer" null="false" default="0" index="index" />
+        <field key="catid" dbtype="int" precision="10" phptype="integer" null="false" default="0" index="index" />
+        <field key="disabled" dbtype="tinyint" precision="1" attributes="unsigned" phptype="boolean" null="false" default="0" index="index" />
+        
+        <index alias="catoption" name="catoption" primary="true" unique="true" type="BTREE" >
+            <column key="optionid" length="" collation="A" null="false" />
+            <column key="catid" length="" collation="A" null="false" />
+        </index>
+        <index alias="disabled" name="disabled" primary="false" unique="false" type="BTREE">
+            <column key="disabled" length="" collation="A" null="false" />
+        </index>
+        
+        <aggregate alias="Option" class="WoolOptions" local="optionid" foreign="id" cardinality="one" owner="foreign" />
+        <aggregate alias="Category" class="WoolCategories" local="catid" foreign="id" cardinality="one" owner="foreign" />
+    </object>
 </model>
