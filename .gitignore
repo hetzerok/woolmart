@@ -35,4 +35,4 @@ setup/config.upgrade.xml
 setup/config.upgrade-advanced.xml
 
 # ignore cache
-/config/cache/
+/core/cache/

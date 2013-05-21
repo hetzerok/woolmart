@@ -1,5 +1,4 @@
 <?php
-
 $wm = $modx->getService('woolmart', 'WoolMart', $modx->getOption('woolmart.core_path', null, $modx->getOption('core_path') . 'components/woolmart/') . 'model/woolmart/', $scriptProperties);
 if (!($wm instanceof WoolMart))
     return '';
@@ -9,6 +8,12 @@ $tpl = $modx->getOption('tpl', $scriptProperties, 'rowTpl');
 $sort = $modx->getOption('sort', $scriptProperties, 'name');
 $dir = $modx->getOption('dir', $scriptProperties, 'ASC');
 
-$output = '';
+$query = $modx->newQuery('WoolProducts');
+//$query->prepare();
+//echo $query->toSQL();
+$list = $modx->getCollection('WoolProducts', $query);
 
-return $output;
+foreach ($list as $var) {
+    $output[] = $var->toArray();
+}
+var_dump($output);
