@@ -1,21 +1,32 @@
 <?php
+
 $wm = $modx->getService('woolmart', 'WoolMart', $modx->getOption('woolmart.core_path', null, $modx->getOption('core_path') . 'components/woolmart/') . 'model/woolmart/', $scriptProperties);
 if (!($wm instanceof WoolMart))
     return '';
 
 //Template properties
-$tpl = $modx->getOption('tpl', $scriptProperties, 'WoolProductsRowTpl');
-$prefix = $modx->getOption('prefix', $scriptProperties, 'wool.');
+$tpl = !empty($tpl) ? $tpl : 'WoolProductsRowTpl';
+$cattpl = !empty($cattpl) ? $cattpl : 'WoolProductsCatTpl';
+$prefix = !empty($prefix) ? $prefix : 'wool.';
+
+//WHERE properties
+$where = !empty($where) ? $modx->fromJSON($where) : array();
+$unique = !empty($unique) ? true : false;
+$grouByParents = !empty($grouByParents) ? true : false;
+$showUnpublished = !empty($showUnpublished) ? true : false;
+$showDeleted = !empty($showDeleted) ? true : false;
+$showHidden = !empty($showHidden) ? true : false;
+$showZeroPrice = !empty($showZeroPrice) ? true : false;
+$context = !empty($context) ? $context : $modx->context->get('key');
 
 //Selection properties
 $parents = (!empty($parents) || $parents === '0') ? explode(',', $parents) : array($modx->resource->get('id'));
-array_walk($parents, 'trim');
-$parents = array_unique($parents);
-$depth = isset($depth) ? (integer) $depth : 10;
-$sortby = isset($sortby) ? $sorby : 'id';
-$sortdir = isset($sortdir) ? $sortdir : 'ASC';
-$limit = isset($limit) ? (integer) $limit : 10;
-$offset = isset($offset) ? (integer) $offset : 0;
+$depth = !empty($depth) ? (integer) $depth : 10;
+$sortby = !empty($sortby) ? $sorby : 'id';
+$sortdir = !empty($sortdir) ? $sortdir : 'ASC';
+$limit = !empty($limit) ? (integer) $limit : 10;
+$offset = !empty($offset) ? (integer) $offset : 0;
+$includeCounts = !empty($includeCounts) ? true : false;
 
 //Flags
 $dbCacheFlag = !isset($dbCacheFlag) ? false : $dbCacheFlag;
@@ -29,85 +40,65 @@ if (is_string($dbCacheFlag) || is_numeric($dbCacheFlag)) {
     }
 }
 
-//Context
-$contextArray = array();
-$contextSpecified = false;
-if (!empty($context)) {
-    $contextArray = explode(',',$context);
-    array_walk($contextArray, 'trim');
-    $contexts = array();
-    foreach ($contextArray as $ctx) {
-        $contexts[] = $modx->quote($ctx);
-    }
-    $context = implode(',',$contexts);
-    $contextSpecified = true;
-    unset($contexts,$ctx);
-} else {
-    $context = $modx->quote($modx->context->get('key'));
-}
-
-//Map of parent => context_key
-$pcMap = array();
-$pcQuery = $modx->newQuery('modResource', array('id:IN' => $parents), $dbCacheFlag);
-$pcQuery->select(array('id', 'context_key'));
+//True parents for context
+$pcQuery = $modx->newQuery('modResource', array('id:IN' => $parents, 'context_key:=' => $context), $dbCacheFlag);
+$pcQuery->select(array('id'));
 if ($pcQuery->prepare() && $pcQuery->stmt->execute()) {
     foreach ($pcQuery->stmt->fetchAll(PDO::FETCH_ASSOC) as $pcRow) {
-        $pcMap[(integer) $pcRow['id']] = $pcRow['context_key'];
+        $trueparents[] = $pcRow['id'];
     }
 }
-var_dump($pcMap);
 
 //Full map of parents
-$children = array();
-$parentArray = array();
-foreach ($parents as $parent) {
-    if ($parent === 0) {
-        $pchildren = array();
-        if ($contextSpecified) {
-            foreach ($contextArray as $pCtx) {
-                if (!in_array($pCtx, $contextArray)) {
-                    continue;
-                }
-                $options = $pCtx !== $modx->context->get('key') ? array('context' => $pCtx) : array();
-                $pcchildren = $modx->getChildIds($parent, $depth, $options);
-                if (!empty($pcchildren))
-                    $pchildren = array_merge($pchildren, $pcchildren);
-            }
-        } else {
-            $cQuery = $modx->newQuery('modContext', array('key:!=' => 'mgr'));
-            $cQuery->select(array('key'));
-            if ($cQuery->prepare() && $cQuery->stmt->execute()) {
-                foreach ($cQuery->stmt->fetchAll(PDO::FETCH_COLUMN) as $pCtx) {
-                    $options = $pCtx !== $modx->context->get('key') ? array('context' => $pCtx) : array();
-                    $pcchildren = $modx->getChildIds($parent, $depth, $options);
-                    if (!empty($pcchildren))
-                        $pchildren = array_merge($pchildren, $pcchildren);
-                }
-            }
-        }
-        $parentArray[] = $parent;
-    } else {
-        $pContext = array_key_exists($parent, $pcMap) ? $pcMap[$parent] : false;
-        if ($pContext && $contextSpecified && !in_array($pContext, $contextArray, true)) {
-            $parent = next($parents);
-            continue;
-        }
-        $parentArray[] = $parent;
-        $options = !empty($pContext) && $pContext !== $modx->context->get('key') ? array('context' => $pContext) : array();
-        $pchildren = $modx->getChildIds($parent, $depth, $options);
-    }
-    if (!empty($pchildren))
-        $children = array_merge($children, $pchildren);
-    $parent = next($parents);
+foreach ($trueparents as $parent) {
+    $ch = $modx->getChildIds($parent, $depth, array('context' => $context));
+    $children = array_merge((array) $children, $ch);
 }
-$parents = array_merge($parentArray, $children);
-var_dump($parents);
+$parents = array_merge($trueparents, $children);
 
-$query = $modx->newQuery('WoolProducts', array(), $dbCacheFlag);
+//Query
+$query = $modx->newQuery('WoolProducts');
+$query->select($modx->getSelectColumns('WoolProducts', 'WoolProducts', $prefix, array('id', 'pagetitle', 'introtext')));
+$query->innerJoin('WoolCatProducts', 'WoolCatProducts', 'WoolProducts.id = WoolCatProducts.productid');
+$query->select($modx->getSelectColumns('WoolCatProducts', 'WoolCatProducts', $prefix, array('productid', 'catid')));
+if (!empty($includeCounts)) {
+    $pcQuery = $modx->newQuery('WoolStores', '', $dbCacheFlag);
+    $pcQuery->select(array('id'));
+    if ($pcQuery->prepare() && $pcQuery->stmt->execute()) {
+        foreach ($pcQuery->stmt->fetchAll(PDO::FETCH_ASSOC) as $pcRow) {
+            $query->innerJoin('WoolProductQuantity', 'WPQ' . $pcRow['id'], 'WoolProducts.id = WPQ' . $pcRow['id'] . '.productid AND WPQ' . $pcRow['id'] . '.storeid = ' . $pcRow['id']);
+            $query->select($modx->getSelectColumns('WoolProductQuantity', 'WPQ' . $pcRow['id'], $prefix . $pcRow['id'] . '.', array('quantity')));
+        }
+    }
+}
 
-$query->select($modx->getSelectColumns('WoolProducts', 'WoolProducts', '', array('id', 'pagetitle', 'introtext')));
+//WHERE
+$criteria = array('WoolCatProducts.catid:IN' => $parents);
+
+if (empty($showDeleted)) {
+    $criteria['WoolProducts.deleted'] = '0';
+}
+if (empty($showUnpublished)) {
+    $criteria['WoolProducts.published'] = '1';
+}
+if (empty($showHidden)) {
+    $criteria['WoolProducts.hidemenu'] = '0';
+}
+if (empty($showZeroPrice)) {
+    $criteria['WoolProducts.price:>'] = '0';
+}
+$query->where($criteria);
+
+//Grouping
+if (!empty($unique)) {
+    $query->groupBy('WoolProducts.id');
+}
 
 //Sorting
+//Можно доделать под сортировку в любом направлении по любому параметру категории
+if (!empty($grouByParents)) {
+    $query->sortby('WoolCatProducts.catid', ASC);
+}
 if (!empty($sortby)) {
     if (strpos($sortby, '{') === 0) {
         $sorts = $modx->fromJSON($sortby);
@@ -128,12 +119,29 @@ if (!empty($limit))
 //Additional variables
 $totalcount = $modx->getCount('WoolProducts', $query);
 
-//$query->prepare();
-//echo $query->toSQL();
-$list = $modx->getCollection('WoolProducts', $query);
-
-foreach ($list as $var) {
-    $results = $var->toArray();
-    $output .= $modx->parseChunk($tpl, $results, '[[+' . $prefix);
+$query->prepare();
+echo $query->toSQL();
+if ($query->prepare() && $query->stmt->execute()) {
+    $tplchunk = $modx->getParser()->getElement('modChunk', $tpl);
+    $tplchunk->setCacheable(false);
+    $catchunk = $modx->getParser()->getElement('modChunk', $cattpl);
+    $catchunk->setCacheable(false);
+    if (!empty($grouByParents)) {
+        foreach ($query->stmt->fetchAll(PDO::FETCH_ASSOC) as $row) {
+            $groupout[$row[$prefix . 'catid']][$prefix . 'groupid'] = $row[$prefix . 'catid'];
+            $groupout[$row[$prefix . 'catid']][$prefix . 'productblock'] .= $tplchunk->process($row);
+            $tplchunk->_processed = false;
+            $groupout[$row[$prefix . 'catid']][$prefix . 'productcount']++;
+        }
+        foreach ($groupout as $group) {
+            $output .= $catchunk->process($group);
+            $catchunk->_processed = false;
+        }
+    } else {
+        foreach ($query->stmt->fetchAll(PDO::FETCH_ASSOC) as $row) {
+            $output .= $tplchunk->process($row);
+        }
+    }
 }
+
 return $output;
