@@ -7,7 +7,7 @@ class WoolMart {
         $this->modx =& $modx;
  
         $basePath = $this->modx->getOption('woolmart.core_path',$config,$this->modx->getOption('core_path').'components/woolmart/');
-        $assetsUrl = $this->modx->getOption('woolmart.assets_path',$config,$this->modx->getOption('assets_url').'components/woolmart/');
+        $assetsUrl = $this->modx->getOption('woolmart.assets_url',$config,$this->modx->getOption('assets_url').'components/woolmart/');
         $this->config = array_merge(array(
             'basePath' => $basePath,
             'corePath' => $basePath,
