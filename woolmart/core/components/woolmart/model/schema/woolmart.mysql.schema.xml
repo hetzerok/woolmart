@@ -156,7 +156,7 @@
     </object>
 
 
-    <object class="WoolProductLinks" table="wool_product_links" extends="xPDOObject">
+    <object class="WoolProductLinks" table="wool_product_links" extends="xPDOSimpleObject">
         <field key="link" dbtype="int" precision="10" phptype="integer" attributes="unsigned" null="false" index="index" />
         <field key="master" dbtype="int" precision="10" phptype="integer" attributes="unsigned" null="false" index="index" />
         <field key="slave" dbtype="int" precision="10" phptype="integer" attributes="unsigned" null="false" index="index" />

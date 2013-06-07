@@ -12,15 +12,12 @@ $xpdo_meta_map = array (
     2 => 'WoolCatProducts',
     3 => 'WoolVendors',
     4 => 'WoolLinks',
-    5 => 'WoolStores',
-    6 => 'WoolProductQuantity',
-    7 => 'WoolProductMemberPrices',
-    8 => 'WoolOptions',
-    9 => 'WoolOptionValues',
-    10 => 'WoolCatOptions',
-  ),
-  'xPDOObject' => 
-  array (
-    0 => 'WoolProductLinks',
+    5 => 'WoolProductLinks',
+    6 => 'WoolStores',
+    7 => 'WoolProductQuantity',
+    8 => 'WoolProductMemberPrices',
+    9 => 'WoolOptions',
+    10 => 'WoolOptionValues',
+    11 => 'WoolCatOptions',
   ),
 );

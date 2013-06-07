@@ -3,7 +3,7 @@ $xpdo_meta_map['WoolProductLinks']= array (
   'package' => 'woolmart',
   'version' => NULL,
   'table' => 'wool_product_links',
-  'extends' => 'xPDOObject',
+  'extends' => 'xPDOSimpleObject',
   'fields' => 
   array (
     'link' => NULL,

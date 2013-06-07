@@ -1,2 +1,2 @@
 <?php
-class WoolProductLinks extends xPDOObject {}
+class WoolProductLinks extends xPDOSimpleObject {}
