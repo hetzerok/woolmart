@@ -26,6 +26,7 @@ $sortdir = !empty($sortdir) ? $sortdir : 'ASC';
 $limit = !empty($limit) ? (integer) $limit : 10;
 $offset = !empty($offset) ? (integer) $offset : 0;
 $includeCounts = !empty($includeCounts) ? true : false;
+$includeOptions = !empty($includeOptions) ? true : false;
 
 //Flags
 $dbCacheFlag = !isset($dbCacheFlag) ? false : $dbCacheFlag;

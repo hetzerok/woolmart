@@ -236,6 +236,16 @@
         <aggregate alias="Products" class="WoolOptionValues" local="id" foreign="optionid" cardinality="many" owner="local" />
     </object>
     
+    <object class="WoolOptionVal" table="wool_option_val" extends="xPDOSimpleObject">
+        <field key="productid" dbtype="int" precision="10" phptype="integer" null="false" default="0" index="index" />
+        
+        <index alias="productid" name="productid" primary="true" unique="true" type="BTREE" >
+            <column key="productid" length="" collation="A" null="false" />
+        </index>
+        
+        <aggregate alias="Product" class="WoolProducts" local="productid" foreign="id" cardinality="one" owner="foreign" />
+    </object>
+    
     <object class="WoolOptionValues" table="wool_option_values" extends="xPDOSimpleObject">
         <field key="optionid" dbtype="int" precision="10" phptype="integer" null="false" default="0" index="index" />
         <field key="productid" dbtype="int" precision="10" phptype="integer" null="false" default="0" index="index" />

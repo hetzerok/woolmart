@@ -17,7 +17,8 @@ $xpdo_meta_map = array (
     7 => 'WoolProductQuantity',
     8 => 'WoolProductMemberPrices',
     9 => 'WoolOptions',
-    10 => 'WoolOptionValues',
-    11 => 'WoolCatOptions',
+    10 => 'WoolOptionVal',
+    11 => 'WoolOptionValues',
+    12 => 'WoolCatOptions',
   ),
 );

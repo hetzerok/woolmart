@@ -3,6 +3,6 @@ $wm = $modx->getService('woolmart', 'WoolMart', $modx->getOption('woolmart.core_
 if (!($wm instanceof WoolMart))
     return '';
 $m = $modx->getManager();
-if($m->createObjectContainer('WoolProductLinks')) {
+if($m->createObjectContainer('WoolOptionVal')) {
     echo 'well done';
 }

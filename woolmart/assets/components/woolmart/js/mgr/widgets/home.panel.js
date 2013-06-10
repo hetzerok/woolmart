@@ -1,5 +1,15 @@
 var fvu = function() {
-    console.log('olololo');
+    MODx.Ajax.request({
+            url: WoolMart.config.connectorUrl
+            ,params: {
+                action: 'mgr/options/ccar'
+            }
+            ,listeners: {
+                'success':{fn:function() {
+                    MODx.msg.alert(_('alert'), _('woolmart.options_cc'), function(){}, MODx);                   
+                },scope:this}
+            }
+        });
 }
 
 WoolMart.panel.Home = function(config) {
